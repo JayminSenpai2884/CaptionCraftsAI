@@ -8,9 +8,6 @@ import {
   FileTextIcon,
   TrendingUpIcon,
   UsersIcon,
-  BarChartIcon,
-  BrainIcon,
-  RefreshCcwIcon,
 } from "lucide-react";
 
 const features = [

@@ -49,7 +49,6 @@ export async function POST(req: Request) {
     });
   }
 
-  const { id } = evt.data;
   const eventType = evt.type;
  
   if (eventType == "user.created" || eventType == "user.updated") {

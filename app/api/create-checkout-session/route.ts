@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import Stripe from "stripe";
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: "2024-09-30.acacia",
-}); 
+});
 export async function POST(req: Request) {
   try {
     const { priceId, userId } = await req.json();
@@ -12,7 +12,7 @@ export async function POST(req: Request) {
         { status: 400 }
       );
     }
-    const session = await stripe.checkout.sessions.create({
+    const session: Stripe.Checkout.Session = await stripe.checkout.sessions.create({
       mode: "subscription",
       payment_method_types: ["card"],
       line_items: [
@@ -26,10 +26,10 @@ export async function POST(req: Request) {
       client_reference_id: userId,
     });
     return NextResponse.json({ sessionId: session.id });
-  } catch (error: any) {
-    console.error("Error creating checkout session:", error);
+  } catch (e) {
+    console.error("Error creating checkout session:", e);
     return NextResponse.json(
-      { error: "Error creating checkout session", details: error.message },
+      { error: "Error creating checkout session" },
       { status: 500 }
     );
   }

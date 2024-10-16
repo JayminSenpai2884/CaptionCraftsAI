@@ -27,10 +27,10 @@ export async function POST(req: Request) {
       signature,
       process.env.STRIPE_WEBHOOK_SECRET!
     );
-  } catch (err: any) {
-    console.error(`Webhook signature verification failed: ${err.message}`);
+  } catch (err: unknown) {
+    console.error(`Webhook signature verification failed:`, err);
     return NextResponse.json(
-      { error: `Webhook Error: ${err.message}` },
+      { error: "Webhook Error" },
       { status: 400 }
     );
   }
@@ -109,10 +109,10 @@ export async function POST(req: Request) {
       await updateUserPoints(userId, pointsToAdd);
 
       console.log(`Successfully processed subscription for user ${userId}`);
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Error processing subscription:", error);
       return NextResponse.json(
-        { error: "Error processing subscription", details: error.message },
+        { error: "Error processing subscription" },
         { status: 500 }
       );
     }

@@ -1,5 +1,6 @@
 import React from "react";
 import { Heart, MessageCircle, Send, Bookmark } from "lucide-react";
+import Image from 'next/image';
 
 interface InstagramMockProps {
   content: string;
@@ -14,7 +15,13 @@ export const InstagramMock: React.FC<InstagramMockProps> = ({ content }) => {
       </div>
       <div className="bg-gray-200 h-64 mb-3 flex items-center justify-center">
         <span className="text-gray-500">
-          <img className="max-w-[61%] flex justify-center m-auto" src="https://scontent.fyyz1-1.fna.fbcdn.net/v/t39.30808-6/327182711_865339301342557_5716295523859851345_n.jpg?_nc_cat=104&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=LMKizkEqmE4Q7kNvgFs_576&_nc_zt=23&_nc_ht=scontent.fyyz1-1.fna&_nc_gid=AAwTtDf4Wylqhexzu1lfZ_x&oh=00_AYBszAqYtpd3pQ8VSdw0Eub4pjT1Ak-decEiFcxieaDA8Q&oe=67157594"></img>
+          <Image 
+            className="max-w-[61%] flex justify-center m-auto" 
+            src="https://scontent.fyyz1-1.fna.fbcdn.net/v/t39.30808-6/327182711_865339301342557_5716295523859851345_n.jpg?_nc_cat=104&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=LMKizkEqmE4Q7kNvgFs_576&_nc_zt=23&_nc_ht=scontent.fyyz1-1.fna&_nc_gid=AAwTtDf4Wylqhexzu1lfZ_x&oh=00_AYBszAqYtpd3pQ8VSdw0Eub4pjT1Ak-decEiFcxieaDA8Q&oe=67157594"
+            alt="Instagram post"
+            width={500}
+            height={500}
+          />
         </span>
       </div>
       <div className="flex justify-between mb-3">

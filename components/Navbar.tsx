@@ -2,7 +2,6 @@
 import Link from "next/link";
 import {
   SignInButton,
-  SignOutButton,
   SignUpButton,
   UserButton,
   SignedOut,

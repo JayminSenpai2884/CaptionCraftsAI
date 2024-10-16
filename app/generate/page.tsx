@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -12,20 +12,12 @@ import {
 } from "@/components/ui/select";
 import {
   Loader2,
-  Upload,
   Copy,
-  Twitter,
-  Instagram,
-  Linkedin,
-  Clock,
   Zap,
-  HistoryIcon,
-  PenToolIcon,
   LayoutIcon,
   AlertCircle,
 } from "lucide-react";
 import { GoogleGenerativeAI, Part } from "@google/generative-ai";
-import ReactMarkdown from "react-markdown";
 import { Navbar } from "@/components/Navbar";
 import { SignInButton, useUser } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
@@ -39,7 +31,6 @@ import {
 import { TwitterMock } from "@/components/display-UI/TwitterMock";
 import { InstagramMock } from "@/components/display-UI/InstagramMock";
 import { LinkedInMock } from "@/components/display-UI/LinkedInMock";
-import Link from "next/link";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -52,7 +43,7 @@ const contentTypes = [
   { value: "linkedin", label: "LinkedIn Post" },
 ];
 
-const MAX_TWEET_LENGTH = 280;
+// const MAX_TWEET_LENGTH = 280;
 const POINTS_PER_GENERATION = 1;
 
 interface HistoryItem {
@@ -73,26 +64,8 @@ export default function GenerateContent() {
   const [image, setImage] = useState<File | null>(null);
   const [userPoints, setUserPoints] = useState<number | null>(null);
   const [history, setHistory] = useState<HistoryItem[]>([]);
-  const [selectedHistoryItem, setSelectedHistoryItem] =
-    useState<HistoryItem | null>(null);
 
-  useEffect(() => {
-    if (!apiKey) {
-      console.error("Gemini API key is not set");
-    }
-  }, []);
-
-  useEffect(() => {
-    if (isLoaded && !isSignedIn) {
-      router.push("/");
-    } else if (isSignedIn && user) {
-      console.log("User loaded:", user);
-      fetchUserPoints();
-      fetchContentHistory();
-    }
-  }, [isLoaded, isSignedIn, user, router]);
-
-  const fetchUserPoints = async () => {
+  const fetchUserPoints = useCallback(async () => {
     if (user?.id) {
       console.log("Fetching points for user:", user.id);
       const points = await getUserPoints(user.id);
@@ -111,15 +84,28 @@ export default function GenerateContent() {
         }
       }
     }
-  };
+  }, [user]);
 
-  const fetchContentHistory = async () => {
+  const fetchContentHistory = useCallback(async () => {
     if (user?.id) {
       const contentHistory = await getGeneratedContentHistory(user.id);
       console.log("Fetched content history:", contentHistory);
       setHistory(contentHistory);
     }
-  };
+  }, [user]);
+
+  useEffect(() => {
+    if (isSignedIn && user) {
+      fetchContentHistory();
+      fetchUserPoints();
+    }
+  }, [isSignedIn, user, fetchContentHistory, fetchUserPoints]);
+
+  useEffect(() => {
+    if (isLoaded && !isSignedIn) {
+      router.push("/");
+    }
+  }, [isLoaded, isSignedIn, router]);
 
   const handleGenerate = async () => {
     if (
@@ -215,17 +201,6 @@ export default function GenerateContent() {
     } finally {
       setIsLoading(false);
     }
-  };
-
-  const handleHistoryItemClick = (item: HistoryItem) => {
-    setSelectedHistoryItem(item);
-    setContentType(item.contentType);
-    setPrompt(item.prompt);
-    setGeneratedContent(
-      item.contentType === "twitter"
-        ? item.content.split("\n\n")
-        : [item.content]
-    );
   };
 
   const copyToClipboard = (text: string) => {
