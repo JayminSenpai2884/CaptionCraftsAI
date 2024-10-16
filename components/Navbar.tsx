@@ -58,7 +58,7 @@ export function Navbar() {
             )}
             <SignedOut>
               <SignInButton mode="modal">
-                <Button variant="ghost" className="bg-white bg-opacity-20 hover:bg-opacity-30 backdrop-blur-sm">Sign In</Button>
+                <Button variant="ghost" className="bg-white bg-opacity-20 hover:bg-opacity-30 backdrop-blur-sm text-gray-800">Sign In</Button>
               </SignInButton>
               <SignUpButton mode="modal">
                 <Button className="bg-blue-600 hover:bg-blue-700 text-white">Sign Up</Button>
